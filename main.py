@@ -48,48 +48,51 @@ def collect_okbtn():
 	return okbtn_pos, helper.get_color(okbtn_pos[0], okbtn_pos[1])  
 	
 def main():
-	sect_pos = helper.mouse_position()
-	if not NPC:
-		men_pos = locate_menu()
-		helper.click(men_pos[0], men_pos[1])
-	else:
-		helper.click(times=2)
-	sleep(2)
-	tab_dst = 45
-	slot_pos, slot_clr, tab_pos, aabtn_pos, aabtn_clr = collect_dialog_data()
-	helper.click(aabtn_pos[0], aabtn_pos[1])
-	sleep(2)
-	okbtn_pos, okbtn_clr = collect_okbtn()
-	helper.click(okbtn_pos[0], okbtn_pos[1])
-	sleep(2)
-	while helper.on:
-		clicked = False
-		while helper.get_color(aabtn_pos[0], aabtn_pos[1]) != aabtn_clr:
-			if not helper.on: quit()
-			if not clicked:
-				helper.click(sect_pos[0], sect_pos[1])
-				if not NPC:
-					sleep(SLEEP[0])
-					helper.click(men_pos[0], men_pos[1])
-				clicked = True
-		
-		if helper.get_color(slot_pos[0], slot_pos[1]) == slot_clr:
-			helper.click(tab_pos[0] + (45 * (TAB - 1)), tab_pos[1])
-			sleep(SLEEP[0])
-			helper.click(tab_pos[0] + 20, tab_pos[1] + 70)
-			while helper.get_color(slot_pos[0], slot_pos[1]) == slot_clr:
-				helper.click(tab_pos[0] + 20, tab_pos[1] + 70)
-				sleep(SLEEP[0])
+	while True:
+		if helper.on:
+			sect_pos = helper.mouse_position()
+			if not NPC:
+				men_pos = locate_menu()
+				helper.click(men_pos[0], men_pos[1])
+			else:
+				helper.click(times=2)
+			sleep(2)
+			tab_dst = 45
+			slot_pos, slot_clr, tab_pos, aabtn_pos, aabtn_clr = collect_dialog_data()
+			helper.click(aabtn_pos[0], aabtn_pos[1])
+			sleep(2)
+			okbtn_pos, okbtn_clr = collect_okbtn()
+			helper.click(okbtn_pos[0], okbtn_pos[1])
+			sleep(2)
+		while helper.on:
+			clicked = False
+			while helper.get_color(aabtn_pos[0], aabtn_pos[1]) != aabtn_clr:
+				if not helper.on: break
+				if not clicked:
+					helper.fast_click(sect_pos[0], sect_pos[1])
+					if not NPC:
+						sleep(0.05)
+						helper.fast_click(men_pos[0], men_pos[1])
+					clicked = True
 			
-		
-		helper.click(aabtn_pos[0], aabtn_pos[1])
-		
-		while helper.get_color(okbtn_pos[0], okbtn_pos[1]) != okbtn_clr:
-			if not helper.on: quit()
-			SLEEP[0]
+			if helper.get_color(slot_pos[0], slot_pos[1]) == slot_clr:
+				helper.fast_click(tab_pos[0] + (45 * (TAB - 1)), tab_pos[1])
+				if SLEEP: sleep(SLEEP[0])
+				helper.fast_click(tab_pos[0] + 20, tab_pos[1] + 70)
+				while helper.get_color(slot_pos[0], slot_pos[1]) == slot_clr:
+					if not helper.on: break
+					helper.fast_click(tab_pos[0] + 20, tab_pos[1] + 70)
+					if SLEEP: sleep(SLEEP[0])
+				
 			
-		helper.click(okbtn_pos[0], okbtn_pos[1])
-		sleep(SLEEP[1])
+			helper.fast_click(aabtn_pos[0], aabtn_pos[1])
+			
+			while helper.get_color(okbtn_pos[0], okbtn_pos[1]) != okbtn_clr:
+				if not helper.on: break
+				if SLEEP: SLEEP[0]
+				
+			helper.fast_click(okbtn_pos[0], okbtn_pos[1])
+			if SLEEP: sleep(SLEEP[1])
 
 
 if __name__ == "__main__":
@@ -117,9 +120,9 @@ if __name__ == "__main__":
 		if ans:
 			ans = ans.group(1)
 			if ans == "1":
-				SLEEP = (0.05, 0.1) 
+				SLEEP = (0.0005, 0.001) 
 			else:
-				SLEEP = (0.0005, 0.001)
+				SLEEP = None
 				
 			break
 			
